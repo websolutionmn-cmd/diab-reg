@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alkaloid Systems User and Roles Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: #f6f9fb;
+  font-family: 'Inter', Arial, sans-serif;
+  color: #232c33;
+  letter-spacing: 0.02em;
+  font-size: 16px;
+}
+.container {
+  margin-top: 40px;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(80, 120, 168, 0.10);
+  border-radius: 24px;
+  padding: 32px 24px 40px 24px;
+  max-width: 1050px;
+  width: 97%;
+  min-height: 900px;
+  margin-bottom: 40px;
+}
+.logo {
+  max-width: 170px;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 2px 4px rgba(8, 57, 120, 0.13));
+}
+h2, h3 {
+  color: #083978;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+}
+h2 {
+  font-size: 2.25rem;
+}
+h3 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+/* --- PROFESSIONAL BUTTON STYLES --- */
+.btn,
+.btn-custom,
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  min-height: 44px;
+  padding: 0 26px;
+  border-radius: 999px !important;
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1.09rem;
+  letter-spacing: 0.015em;
+  border: none;
+  background: linear-gradient(90deg, #2953c6 0%, #3B4285 100%);
+  color: #fff !important;
+  box-shadow: 0 2px 12px rgba(51,80,140,0.11);
+  transition: background 0.22s, transform 0.12s, box-shadow 0.22s, color 0.18s;
+  cursor: pointer;
+  outline: none;
+}
+.btn:hover,
+.btn-custom:hover,
+.btn-primary:hover {
+  background: linear-gradient(90deg, #3757a4 0%, #2953c6 100%);
+  color: #fff !important;
+  transform: scale(1.04);
+  box-shadow: 0 4px 24px rgba(39,80,148,0.16), 0 0 0 3px #a5b8e5a0;
+}
+.btn-secondary {
+  background: linear-gradient(90deg, #f3f6fa 0%, #e2e6ed 100%) !important;
+  color: #2953c6 !important;
+  border: 1.5px solid #b9c8e8 !important;
+  box-shadow: 0 2px 10px rgba(186,198,226,0.09);
+  font-weight: 500;
+}
+.btn-secondary:hover {
+  background: linear-gradient(90deg, #e2e6ed 0%, #dde6f3 100%) !important;
+  color: #2c3455 !important;
+  box-shadow: 0 4px 18px rgba(113,128,174,0.12), 0 0 0 3px #a5b8e575;
+  transform: scale(1.025);
+}
+/* Small button size for logout (override min-width/height) */
+.logout-btn {
+  min-width: 88px;
+  min-height: 32px;
+  font-size: 0.95rem;
+  padding: 0 18px;
+  border-radius: 24px !important;
+  box-shadow: 0 2px 7px rgba(231,43,43,0.12);
+  background: linear-gradient(90deg, #e34444 0%, #dc4848 100%) !important;
+  color: #fff !important;
+}
+.logout-btn:hover {
+  background: linear-gradient(90deg, #d13c3c 0%, #b31d1d 100%) !important;
+  box-shadow: 0 4px 14px rgba(200,51,51,0.18), 0 0 0 2px #f3a5a575;
+  transform: scale(1.05);
+}
+
+/* --- FILTERS, SEARCH, LABELS --- */
+.filters label,
+.filters select {
+  font-size: 1.12rem;
+  font-weight: 500;
+  color: #4668c7;
+}
+.filters select {
+  max-width: 320px;
+  display: inline-block;
+  margin-left: 8px;
+  border-radius: 9px;
+  border: 1px solid #e3eaf3;
+  padding: 7px 18px;
+  background: #f8fafc;
+  font-size: 1rem;
+}
+#searchInput {
+  width: 340px;
+  padding: 11px 18px;
+  border-radius: 21px;
+  border: 1px solid #e3eaf3;
+  background: #f8fafc;
+  font-size: 1.07rem;
+  margin-left: 18px;
+  margin-bottom: 7px;
+}
+#searchInput:focus {
+  outline: 2px solid #a1c4fd;
+}
+
+/* --- TABLE MODERN LOOK --- */
+.table thead {
+  background: linear-gradient(90deg, #3B4285 0%, #4668c7 100%);
+  color: #fff;
+  font-size: 1.07rem;
+  letter-spacing: 0.02em;
+  border-radius: 6px 6px 0 0;
+}
+.selected-row td {
+  background-color: #c6e0ff !important;
+}
+table {
+  width: 100%;
+  table-layout: auto;
+  margin: 0 auto;
+  background: #f9fcfe;
+  border-radius: 10px;
+  overflow: hidden;
+}
+th, td {
+  text-align: left;
+  padding: 10px 10px;
+  font-size: 0.99rem;
+  vertical-align: middle;
+  background: transparent;
+}
+th {
+  background: #3B4285;
+  color: #fff;
+  border-bottom: 1px solid #e3eaf3;
+}
+td {
+  background: #fff;
+}
+tr {
+  border-bottom: 1px solid #e3eaf3;
+  transition: background 0.18s;
+}
+tr:hover td {
+  background: #eef4fa !important;
+}
+td input {
+  width: 98%;
+  border: none;
+  background: #f8fafc;
+  padding: 5px 9px;
+  border-radius: 5px;
+  font-size: 0.99rem;
+  transition: background 0.15s;
+}
+td input:focus {
+  background: #e7f0ff;
+  outline: 2px solid #a1c4fd;
+}
+.checkbox {
+  text-align: center;
+}
+
+/* --- MISC FORM STYLES --- */
+.form-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(28, 44, 89, 0.21);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.form-modal {
+  background: #fff;
+  padding: 28px 24px 22px 24px;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 48px rgba(30,40,82,0.13);
+  max-height: 82vh;
+  overflow-y: auto;
+}
+.form-modal input, .form-modal textarea, .form-modal select {
+  width: 100%;
+  border-radius: 7px;
+  border: 1px solid #e3eaf3;
+  padding: 7px 11px;
+  margin-top: 6px;
+  font-size: 1rem;
+  background: #f8fafc;
+}
+.form-modal input:focus, .form-modal textarea:focus, .form-modal select:focus {
+  outline: 2px solid #a1c4fd;
+}
+.form-modal .checkbox-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px 17px;
+  margin-top: 8px;
+}
+.form-modal .checkbox-row label {
+  width: auto;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* --- POPUP MODERN LOOK --- */
+.popup-message {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f7fbff;
+  padding: 28px 22px 24px 22px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(30, 65, 148, 0.13);
+  z-index: 9999;
+  text-align: center;
+  max-width: 420px;
+  width: 87vw;
+  border: 1px solid #dde5f0;
+}
+.popup-content p {
+  margin: 0 0 18px 0;
+  color: #2c3455;
+  font-size: 1.09rem;
+}
+.popup-content button {
+  padding: 8px 26px;
+  background: linear-gradient(90deg, #3252af 0%, #3B4285 100%);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-size: 1.01rem;
+  margin-top: 8px;
+}
+.popup-content button:hover {
+  background: #4668c7;
+}
+
+/* --- COUNT AND LABELS --- */
+.selected-count {
+  text-align: right;
+  margin-top: 10px;
+  color: #3B4285;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 0;
+}
+
+/* --- CHECKBOXES --- */
+.center-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 18px 0 16px 0;
+  gap: 18px;
+}
+.center-container label {
+  font-size: 1.23rem;
+  margin-bottom: 0;
+  color: #4668c7;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.center-container input[type="checkbox"] {
+  transform: scale(1.25);
+  margin-right: 8px;
+}
+.center-container input[type="text"] {
+  font-size: 1.1rem;
+  padding: 0;
+  width: 440px;
+  border-radius: 7px;
+  border: 1px solid #e3eaf3;
+}
+
+/* --- SPACING UTILITIES --- */
+.mb-4 { margin-bottom: 1.5rem !important; }
+.mt-4 { margin-top: 1.5rem !important; }
+.mb-3 { margin-bottom: 1rem !important; }
+.ms-2 { margin-left: .5rem !important; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .container { padding: 18px 3vw; }
+  #searchInput { width: 200px; }
+}
+@media (max-width: 768px) {
+  .container { margin-top: 0; padding: 7px 0 20px 0; border-radius: 8px;}
+  .center-container input[type="text"] { width: 95vw; }
+  .logo { max-width: 120px; }
+  #searchInput { width: 110px; }
+}
+.narrow-column {
+  min-width: 30px;
+  max-width: 70px;
+  width: 60px;
+  font-size: 0.8rem;
+  white-space: normal; /* овозможи текстот да оди во повеќе редови */
+  word-wrap: break-word; /* дозволи кршење на зборови */
+  text-align: center; /* поубав изглед на малите колони */
+  vertical-align: middle;
+}
+
+th.narrow-column {
+  font-size: 0.8rem;
+  white-space: normal; /* дозволи заглавието да оди во два реда */
+  word-wrap: break-word;
+  text-align: center;
+  padding: 5px 3px; /* намали padding */
+  line-height: 1.2; /* помало растојание меѓу редови */
+}
+.table-responsive {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+}
+table {
+  width: 100%;
+  table-layout: auto; 
+  border-collapse: separate;
+  border-spacing: 0;
+}
+table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #3B4285;
+  color: #fff;
+}
+
+table td:first-child, table th:first-child {
+  position: sticky;
+  left: 0;
+  background-color: #f8fafc;
+  z-index: 1;
+}
+
+table th:first-child {
+ position: sticky;
+  z-index: 11; /* Ensure header stays above cells */
+  background-color: #3B4285; /* header background */
+  color: #fff;
+}
+
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <button class="btn btn-danger btn-sm logout-btn" onclick="logOut()">Log Out</button>
+
+    <div class="text-center">
+      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Alkaloid_%28company%29_Logo.svg/1200px-Alkaloid_%28company%29_Logo.svg.png" alt="Алкалоид Лого" class="logo">
+    </div>
+
+    <h2 class="text-center mb-4"><b>Alkaloid Systems User and Roles Management<br><br><i>Admin Panel</i></b></h2>
+    <div class="text-end mt-4">
+<a href="#" id="viewLogsBtn" class="btn btn-link" style="font-size: 1.25rem;">
+  <i class="bi bi-journal-text me-2"></i> Logs
+</a>    </div>
+
+    <div class="d-flex justify-content-between mb-3">
+      <button id="refreshBtn" class="btn btn-custom" style="background-color: #6c757d;">🔄 Refresh</button>
+    </div>
+
+    <button id="addNewSoftwareBtn" class="btn btn-custom">
+      <i class="bi bi-plus-circle"></i>  Add New Software
+    </button>
+
+    <div id="addSoftwareFormContainer" class="form-container">
+      <div class="form-modal">
+        <h3 id="formTitle">Add New Software</h3>
+        <form id="addSoftwareForm" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="softwareName" class="form-label">Software Name</label>
+            <input type="text" class="form-control" id="softwareName" required>
+          </div>
+          <div class="mb-3">
+            <label for="inventoryNumber" class="form-label">System Lab Number</label>
+            <input type="text" class="form-control" id="inventoryNumber">
+          </div>
+          <div class="mb-3">
+            <label for="optionalField" class="form-label">PC Inventory Number</label>
+            <input type="text" class="form-control" id="optionalField">
+          </div>
+          		     <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" id="exitFormBtn" class="btn btn-secondary ms-2">Exit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="center-container">
+      <div>
+        <label><input type="checkbox" id="rdCheckbox"><b> R&amp;D </b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><input type="checkbox" id="qcCheckbox"><b> QC </b></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><input type="checkbox" id="otherCheckbox"><b> Other </b></label>
+      </div>
+    </div>
+
+    <div class="filters mb-3">
+      <label for="softwareFilter"><b>Select Software:</b></label>
+      <select id="softwareFilter" class="form-select">
+        <option value="">--Select Software--</option>
+        <option value="all">---- ALL ----</option>
+      </select>
+    </div>
+<div class="filters mb-3">
+  <label for="nameFilter"><b>Select Name(s):</b></label>
+  <select id="nameFilter" class="form-select" multiple></select>
+</div>
+
+    <div id="columnsInfo" class="columns-info mb-4"></div>
+
+    <div class="selected-count">
+      <span id="selectedCount">Selected Rows: 0</span>
+    </div>
+
+    <div class="d-flex justify-content-between" id="actionButtons" style="display: none;">
+      <button id="addNewBtn" class="btn btn-custom">
+        <i class="bi bi-table"></i> Add New Row
+      </button>
+      <div>
+        <button id="saveBtn" class="btn btn-custom">💾 Save Changes</button>
+        <button id="viewSelectedBtn" class="btn btn-custom">👁️ View Selected</button>
+        <button id="exportBtn" class="btn btn-custom" style="display:none;">📥 Export Table</button>
+      </div>
+    </div>
+    <div class="center-container">
+      <button id="exportTableBtn" class="btn btn-custom" style="display:none;">📥 Export Table</button>
+      <input type="text" id="searchInput" placeholder="Search...">
+    </div>
+    <br>
+    <button id="selectAllBtn" class="btn btn-custom" style="display: none;">Select All</button>
+    <br>
+<div class="text-center mb-2">
+  <h3 id="selectedSoftwareName" style="color:#083978;"></h3>
+</div>
+
+    <div id="dynamicFormContainer" class="form-container">
+      <div class="form-modal">
+        <h3 id="formTitle">Add New User</h3>
+        <form id="userForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name and Surname</label>
+            <input type="text" class="form-control" id="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="department" class="form-label">Department</label>
+            <input type="text" class="form-control" id="department" required>
+          </div>
+          <div class="mb-3 checkbox-row">
+            <label><input type="checkbox" id="windowsUser"> Windows User</label>
+            <label><input type="checkbox" id="applicationUser"> Application User</label>
+            <label><input type="checkbox" id="analyst"> Analyst</label>
+            <label><input type="checkbox" id="seniorAnalyst"> Senior Analyst</label>
+            <label><input type="checkbox" id="reviewer"> Reviewer</label>
+            <label><input type="checkbox" id="approver"> Approver</label>
+            <label><input type="checkbox" id="maintenance"> Maintenance</label>
+            <label><input type="checkbox" id="itAdmin"> IT Administrator</label>
+            <label><input type="checkbox" id="externalSupport"> External Support (Full Access)</label>
+          </div>
+          <div class="mb-3">
+            <label for="comments" class="form-label">Comments (max 180 characters)</label>
+            <textarea class="form-control" id="comments" maxlength="180"></textarea>
+          </div>
+          <button type="submit" class="btn btn-custom">Save</button>
+          <button type="button" id="exitFormBtn" class="btn btn-secondary">Exit</button>
+        </form>
+      </div>
+    </div>
+    <br>
+
+    <div id="popupMessage" class="popup-message">
+      <div class="popup-content">
+        <p id="popupText"></p>
+        <button id="closePopupBtn" class="btn btn-primary">OK</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table id="excelTable" class="display table table-striped table-bordered mt-4"></table>
+    </div>
+  </div>
+
+  <div id="logsPopup" class="popup-message">
+    <div class="popup-content">
+      <h3>Logs</h3>
+      <table id="logsTable" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody id="logsTableBody">
+        </tbody>
+      </table>
+      <button id="closeLogsPopupBtn" class="btn btn-primary">Close</button>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+
+ 
+document.getElementById('rdCheckbox').addEventListener('change', filterLogs);
+document.getElementById('qcCheckbox').addEventListener('change', filterLogs);
+document.getElementById('otherCheckbox').addEventListener('change', filterLogs);
+
+function filterLogs() {
+  const isRdChecked = document.getElementById('rdCheckbox').checked;
+  const isQcChecked = document.getElementById('qcCheckbox').checked;
+  const isOtherChecked = document.getElementById('otherCheckbox').checked;
+
+  
+  const filteredRows = rowData.filter(row => {
+    const department = (row['Department'] || '').trim().toUpperCase();  
+
+    const isRd = isRdChecked && (department === 'RD' || department === 'R&D');
+    const isQc = isQcChecked && department === 'QC';
+    const isOther = isOtherChecked && !(department === 'RD' || department === 'R&D' || department === 'QC');
+
+    return isRd || isQc || isOther;  
+  });
+
+ 
+  table.clear().rows.add(filteredRows).draw();
+}
+
+	  
+	  function showPopupMessage(message, isSuccess) {
+  const popupMessage = document.getElementById('popupMessage');
+  const popupText = document.getElementById('popupText');
+  const closePopupBtn = document.getElementById('closePopupBtn');
+
+  
+  popupText.textContent = message;
+  popupMessage.style.backgroundColor = isSuccess ? '#d4edda' : '#f8d7da'; 
+  
+
+  popupMessage.style.display = 'block';
+
+  
+  closePopupBtn.onclick = function() {
+    popupMessage.style.display = 'none';
+  };
+}
+
+
+document.getElementById('addSoftwareForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); 
+
+  const softwareName = document.getElementById('softwareName').value;
+  const inventoryNumber = document.getElementById('inventoryNumber').value;
+  const optionalField = document.getElementById('optionalField').value;
+
+  // Наместо FormData (бидејќи немаме upload на датотека), ќе праќаме JSON
+  const payload = {
+    softwareName: softwareName,
+    inventoryNumber: inventoryNumber,
+    optionalField: optionalField,
+    templateFile: "Template_SURM.xlsx"  // >>> Ова ќе му кажеме на серверот да користи темплејтот
+  };
+
+  try {
+    const res = await fetch('/api/software/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'   // Важно! Пошто праќаме JSON
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showPopupMessage('Software added successfully!', true);
+      loadSoftwareFiles();
+      document.getElementById('addSoftwareFormContainer').style.display = 'none';
+    } else {
+      showPopupMessage('Error adding software: ' + data.error, false);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    showPopupMessage('Failed to add software.', false);
+  }
+});
+
+
+	  let logs = []; 
+
+
+function createLogEntry(oldValue, newValue, software, rowIndex, columnName) {
+  const currentDate = new Date();
+  const logDate = currentDate.toLocaleString(); 
+  const logMessage = `On ${logDate}, Software "${software}" row ${rowIndex} (${columnName}) changed from "${oldValue}" to "${newValue}".`;
+
+
+  logs.push({ date: logDate, message: logMessage });
+  console.log(logMessage); 
+}
+
+
+function saveLogsToServer() {
+  fetch('/api/save-logs', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ logs })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      console.log('Logs saved successfully!');
+    } else {
+      console.error('Error saving logs');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+
+$(document).on('input', '.editable-field', function() {
+  const oldValue = $(this).data('oldValue');
+  const newValue = $(this).val();
+  const rowIndex = $(this).closest('tr').index();
+  const columnName = headers[$(this).closest('td').index()];
+  const software = currentFile;
+
+  if (oldValue !== newValue) {
+    createLogEntry(oldValue, newValue, software, rowIndex, columnName);
+    $(this).data('oldValue', newValue); 
+
+    
+    saveLogsToServer();
+  }
+});
+
+
+
+$(document).on('input', '.editable-field', function() {
+  const oldValue = $(this).data('oldValue');
+  const newValue = $(this).val();
+  const rowIndex = $(this).closest('tr').index();
+  const columnName = headers[$(this).closest('td').index()];
+  const software = currentFile;
+
+  if (oldValue !== newValue) {
+    createLogEntry(oldValue, newValue, software, rowIndex, columnName);
+    $(this).data('oldValue', newValue); 
+  }
+});
+
+
+	      function logOut() {
+      window.location.href = "/";  
+    }
+	 
+document.getElementById('addNewSoftwareBtn').addEventListener('click', () => {
+  document.getElementById('addSoftwareFormContainer').style.display = 'flex'; 
+});
+
+
+document.getElementById('exitFormBtn').addEventListener('click', () => {
+  document.getElementById('addSoftwareFormContainer').style.display = 'none'; 
+});
+
+
+document.getElementById('addSoftwareForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); 
+
+  
+  const softwareName = document.getElementById('softwareName').value;
+  const inventoryNumber = document.getElementById('inventoryNumber').value;
+  const optionalField = document.getElementById('optionalField').value;
+  const softwareFile = document.getElementById('softwareFile').files[0];
+
+  
+  if (!softwareFile || softwareFile.type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+    showPopupMessage('Please upload a valid Excel file.', false);  
+    return;
+  }
+
+ 
+  const formData = new FormData();
+  formData.append('softwareName', softwareName);
+  formData.append('inventoryNumber', inventoryNumber);
+  formData.append('optionalField', optionalField);
+  formData.append('softwareFile', softwareFile);
+
+
+  try {
+    const res = await fetch('/api/software/add', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showPopupMessage('Software added successfully!', true);  
+      loadSoftwareFiles();  
+      document.getElementById('addSoftwareFormContainer').style.display = 'none';
+    } else {
+      showPopupMessage('Error adding software: ' + data.error, false);  
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    showPopupMessage('Failed to add software.', false);  
+  }
+});
+
+
+document.getElementById('viewLogsBtn').addEventListener('click', () => {
+  fetch('/api/logs')  
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        let logsHTML = '<h3>Change Logs</h3><ul>';
+        data.logs.forEach(log => {
+          logsHTML += `<li>${log}</li>`;
+        });
+        logsHTML += '</ul>';
+
+        
+        const logWindow = window.open('', '_blank', 'width=600,height=400');
+        logWindow.document.write('<html><head><title>Logs</title></head><body>');
+        logWindow.document.write(logsHTML);
+        logWindow.document.write('</body></html>');
+      } else {
+        alert('No logs available.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to fetch logs.');
+    });
+});
+
+
+function loadSoftwareFiles() {
+  fetch('/api/excel/files')
+    .then(res => res.json())
+    .then(json => {
+      const softwareSelect = document.getElementById('softwareFilter');
+      softwareSelect.innerHTML = '';
+      softwareSelect.appendChild(new Option('--Select Software--', '')); 
+      json.excelFiles.forEach(file => {
+        const option = document.createElement('option');
+        option.value = file;
+        option.textContent = file.replace('.xlsx', ''); 
+        softwareSelect.appendChild(option);
+      });
+    });
+}
+
+
+
+	 
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  location.reload();  
+});
+
+document.getElementById('selectAllBtn').addEventListener('click', () => {
+  const checkboxes = document.querySelectorAll('.rowCheckbox');
+  const allChecked = [...checkboxes].every(checkbox => checkbox.checked);
+
+  
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = !allChecked;
+    const row = $(checkbox).closest('tr');
+    if (checkbox.checked) {
+      row.addClass('selected-row');
+      row.find('td').css('background-color', '#91b8eb');  
+    } else {
+      row.removeClass('selected-row');
+      row.find('td').css('background-color', '');  
+    }
+  });
+
+
+  const selectedRowsCount = document.querySelectorAll('.rowCheckbox:checked').length;
+  document.getElementById('selectedCount').textContent = `Selected Rows: ${selectedRowsCount}`;
+});
+
+	  
+	 let table;
+let headers = [];
+let rowData = [];
+let currentFile = '';
+
+document.getElementById('exportTableBtn').addEventListener('click', () => {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...selectedRows.map(row => headers.map(header => row[header]))]);
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Selected Rows');
+  
+  // Save the Excel file
+  XLSX.writeFile(wb, 'selected_rows.xlsx');
+});
+
+
+fetch('/api/excel/files')
+  .then(res => res.json())
+  .then(json => {
+    const softwareSelect = document.getElementById('softwareFilter');
+    json.excelFiles.forEach(file => {
+      const option = document.createElement('option');
+      option.value = file;
+      option.textContent = file.replace('.xlsx', '');
+      softwareSelect.appendChild(option);
+    });
+  });
+  
+
+
+document.getElementById('softwareFilter').addEventListener('change', (e) => {
+  currentFile = e.target.value;
+document.getElementById('selectedSoftwareName').textContent = currentFile.replace('.xlsx', '');
+
+  
+  if (currentFile) {
+    document.getElementById('actionButtons').style.display = 'flex';  
+    document.getElementById('selectAllBtn').style.display = 'inline-block';  
+  } else {
+    document.getElementById('actionButtons').style.display = 'none';  
+    document.getElementById('selectAllBtn').style.display = 'none';  
+  }
+
+  if (currentFile) {
+    fetch(`/api/excel/${currentFile}`)
+      .then(res => res.json())
+      .then(json => {
+        headers = json.headers;
+        rowData = json.data;rowData = json.data;
+// Пополнување на Name селекторот (Name filter)
+const nameFilter = document.getElementById('nameFilter');
+nameFilter.innerHTML = ''; // Чистење на претходните имиња
+
+// Собери уникатни имиња од колоната 'Name', 'User' или 'Име'
+const uniqueNames = [...new Set(rowData.map(row => row['Name'] || row['User'] || row['Име'] || '').filter(name => name.trim() !== ''))];
+
+// Сортирај ги имињата по азбучен ред
+uniqueNames.sort();
+
+// Додај опции во селекторот
+uniqueNames.forEach(name => {
+  const option = document.createElement('option');
+  option.value = name;
+  option.textContent = name;
+  nameFilter.appendChild(option);
+});
+
+// Иницијализирај го Select2 пак
+$('#nameFilter').select2({
+  placeholder: "Select Name(s)",
+  allowClear: true,
+  width: 'resolve'
+});
+
+// Додади event за филтрирање кога ќе селектира нешто
+$('#nameFilter').off('change').on('change', function() {
+  const selectedNames = $(this).val();
+  
+  const filteredData = rowData.filter(row => {
+    const userName = row['Name'] || row['User'] || row['Име'] || '';
+    return selectedNames.length === 0 || selectedNames.includes(userName);
+  });
+
+  table.clear().rows.add(filteredData).draw();
+});
+
+    
+        if (!headers.includes("Забелешка")) {
+          headers.push("Забелешка"); 
+        }
+
+        const columns = [
+          { title: 'Select', data: null, className: 'checkbox', render: function(data, type, row) {
+            return `<input type="checkbox" class="rowCheckbox">`;}
+          },
+          ...headers.slice(0, 13).map((header, index) => {
+    if (index < 4) {
+      return { title: header, data: header, render: function(data) {
+        return `<input type="text" class="editable-field" value="${data}">`;
+      }};
+    }
+    if (index >= 4 && index <= 12) {
+      return { 
+        title: header, 
+        data: header, 
+        className: (index >= 4 ? 'narrow-column' : ''),  // << додади класа
+        render: function(data) {
+          return `<input type="checkbox" class="checkbox-field" data-column="${header}" ${data === 'X' ? 'checked' : ''}>`;
+        }
+      };
+    }
+    if (index === 13) {
+      return { title: header, data: header, render: function(data) {
+        return `<input type="text" class="editable-field" maxlength="180" value="${data}">`;
+      }};
+    }
+}),
+
+          { title: 'Comments', data: 'Забелешка', render: function(data) {
+            return `<input type="text" class="editable-field" value="${data || ''}">`;  
+          }}
+        ];
+
+       
+        if (table) {
+          table.clear().destroy();
+        }
+
+     // Ensure undefined or null values are replaced with an empty string
+rowData = rowData.map(row => {
+  headers.forEach(header => {
+    if (row[header] === undefined || row[header] === null) {
+      row[header] = '';  // Replace undefined or null with an empty string
+    }
+  });
+  return row;
+});
+
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  const searchTerm = e.target.value;
+  if (table) {
+    // Ensure the table is initialized before attempting search
+    table.search(searchTerm).draw();  // Trigger search on DataTable
+  }
+});
+
+
+// Initialize the DataTable with cleaned rowData
+// Инициализација на DataTable со пребарување
+table = $('#excelTable').DataTable({
+  data: rowData,
+  columns: columns,
+  scrollX: true,
+  paging: true,
+  pageLength: 20,
+  searching: false,
+  autoWidth: false,  // овозможува автоматско прилагодување на ширината
+  responsive: true,  // овозможува да може да се зголемуваат и намалуваат колоните
+  fixedColumns: { leftColumns: 5 },
+  rowCallback: function(row, data) {
+  const checkbox = $(row).find('.rowCheckbox');
+  checkbox.prop('checked', data._selected || false);
+
+  if (data._selected) {
+    $(row).addClass('selected-row');
+  } else {
+    $(row).removeClass('selected-row');
+  }
+
+  checkbox.off('change').on('change', function() {
+    data._selected = this.checked;
+    selectedRows = rowData.filter(row => row._selected);
+    document.getElementById('selectedCount').textContent = `Selected Rows: ${selectedRows.length}`;
+    reorderSelectedRows();  // пререди ги редовите кога се промени селекцијата
+  });
+
+  $(row).find('.editable-field').on('input', function() {
+    const columnIndex = $(this).closest('td').index();
+    const columnName = headers[columnIndex];
+    data[columnName] = $(this).val();
+  });
+
+  $(row).find('.checkbox-field').on('change', function() {
+    const columnName = $(this).data('column');
+    const isChecked = $(this).prop('checked');
+    data[columnName] = isChecked ? 'X' : '';
+  });
+}
+
+});
+
+
+
+// Обезбеди дека овој код го има само еднаш во твојата скрипта
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  const searchTerm = e.target.value.toLowerCase();
+
+  const filteredData = rowData.filter(row => {
+    return Object.values(row).some(value => {
+      if (typeof value === 'string') {
+        return value.toLowerCase().includes(searchTerm);
+      }
+      return false;
+    });
+  });
+
+  table.clear().rows.add(filteredData).draw();
+});
+
+
+      });
+  }
+});
+
+function reorderSelectedRows() {
+  rowData.sort((a, b) => {
+    if (a._selected && !b._selected) return -1;
+    if (!a._selected && b._selected) return 1;
+    return 0;
+  });
+
+  table.clear().rows.add(rowData).draw(false);
+}
+
+
+	document.getElementById('addNewBtn').addEventListener('click', () => {
+	  const newRow = {};
+	  newRow[headers[0]] = rowData.length + 1;  
+
+	  
+	  headers.slice(1, 13).forEach(header => {
+		newRow[header] = ''; 
+	  });
+
+	  
+	  newRow["User"] = '';  
+	  newRow["Забелешка"] = ''; 
+
+	  
+	  rowData.push(newRow);
+	  
+	 
+	  table.row.add(newRow).draw();
+	});
+
+
+
+	  
+	document.getElementById('saveBtn').addEventListener('click', () => {
+	  fetch(`/api/excel/save/${currentFile}`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ data: rowData })
+	  })
+	  .then(response => response.json())
+	  .then(json => {
+		if (json.success) {
+		  alert('Changes saved successfully!');
+
+		  
+		  rowData = json.data; 
+		  table.clear().rows.add(rowData).draw();  
+		} else {
+		  alert('Error saving changes!');
+		}
+	  })
+	  .catch(error => {
+		console.error('Error:', error);
+		alert('Failed to save changes!');
+	  });
+	});
+
+
+	  
+	  let selectedRows = [];
+
+// Ensure that when a row is checked, it is added to selectedRows and removed when unchecked
+$(document).on('change', '.rowCheckbox', function() {
+  const row = $(this).closest('tr');
+  const rowData = table.row(row).data(); // Get row data
+  const softwareName = currentFile; // Store the software name for the row
+  
+  if (this.checked) {
+    // Check if the row is already selected to avoid duplicates
+    if (!selectedRows.includes(rowData)) {
+      selectedRows.push({ ...rowData, software: softwareName });
+    }
+  } else {
+    selectedRows = selectedRows.filter(item => item !== rowData);
+  }
+
+  // Update the selected count
+  document.getElementById('selectedCount').textContent = `Selected Rows: ${selectedRows.length}`;
+});
+
+// When viewing selected rows
+document.getElementById('viewSelectedBtn').addEventListener('click', () => {
+  let selectedTableHTML = `
+    <h3>Selected Rows</h3>
+    <button id="exportTableBtnInWindow" class="btn btn-custom">📥 Export Table</button>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Software</th>
+          ${headers.map(header => `<th>${header}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${selectedRows.map(row => `
+          <tr>
+            <td>${row.software}</td>
+            ${headers.map(header => `<td>${row[header]}</td>`).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  const newTab = window.open();
+  newTab.document.body.innerHTML = selectedTableHTML;
+
+  // Add export functionality for the new tab
+  newTab.document.getElementById('exportTableBtnInWindow').addEventListener('click', () => {
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet([headers, ...selectedRows.map(row => headers.map(header => row[header]))]);
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Selected Rows');
+    
+    // Save the Excel file
+    XLSX.writeFile(wb, 'selected_rows.xlsx');
+  });
+});
+
+
+	</script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+	</body>
+	</html>
