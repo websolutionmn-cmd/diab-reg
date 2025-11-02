@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diabetic Products Certification System</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --primary-dark: #1a252f;
+      --secondary: #3498db;
+      --light: #f8f9fa;
+      --light-gray: #ecf0f1;
+      --dark: #2c3e50;
+      --dark-gray: #95a5a6;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --search-bg: #f8f9fa;
+    }
+    body {
+      font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      background-color: #f5f7fa;
+      color: #34495e;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    .header h1 {
+      margin: 0;
+      font-weight: 500;
+    }
+    .logout-btn {
+      color: white;
+      background: rgba(255,255,255,0.15);
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logout-btn:hover {
+      background: rgba(255,255,255,0.25);
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 20px;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    th, td {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 15px 20px;
+      text-align: left;
+      vertical-align: middle;
+    }
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: 500;
+    }
+    tr:nth-child(even) {
+      background-color: var(--light-gray);
+    }
+    tr:hover {
+      background-color: rgba(52, 152, 219, 0.05);
+    }
+    select, button, a {
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    button {
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 100px;
+    }
+    .save-btn {
+      background-color: var(--success);
+      color: white;
+      border: none;
+      margin-left: 8px;
+    }
+    .save-btn:hover {
+      background-color: #228176;
+    }
+    .issue-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+    }
+    .issue-btn:hover {
+      background-color: #005b91;
+    }
+    button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .action-bar, {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+.search-section {
+  display: flex;
+  justify-content: center;  /* ново */
+  margin: 20px 0;
+}
+
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .filter-group h4 {
+      margin: 0 0 5px 0;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    .filter-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #555;
+      cursor: pointer;
+    }
+
+    #searchField {
+      flex-grow: 1;
+      padding: 10px 15px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      background: var(--search-bg);
+    }
+
+    .filter-group input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: var(--search-bg);
+    }
+    .refresh-btn {
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+    }
+    .logs-btn {
+      background-color: var(--warning);
+      color: var(--dark);
+      border: none;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+	#appsTable {
+  width: calc(100% + 40px);
+  margin-left: 20px;
+  margin-right: 20px;
+}
+#logsTable {
+  width: calc(100% + 40px);
+  margin-left: -20px;
+  margin-right: -20px;
+}
+/* Само за делот каде ти е табелата: */
+.container.full-width {
+  max-width: none;
+  padding: 0;
+}
+
+  </style>
+</head>
+<body>
+      <header style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 2rem 1rem; text-align: center;">
+      <div style="max-width: 800px; margin: 0 auto;">
+        <img src="/logo.jpg" alt="DIAB-REG Logo" style="height: 100px; margin-bottom: 1rem;">
+        <h1 style="font-size: 1.5rem; font-weight: 700; margin: 0 0 0.5rem; color: white;">Систем за стандардизирани потврди и регулација</h1>
+        <p style="font-size: 1.1rem; opacity: 0.9; margin: 0;">
+          на производи наменети за сите лица со дијабетес
+        </p><BR><BR>
+<h1 style="font-size: 3rem; font-weight: 700; margin: 0 0 0.5rem; color: white;">АДМИНИСТРАТОРСКИ ПАНЕЛ</h1>
+       
+      </div>
+    </header>
+  <div class="container">
+    <div class="action-bar">
+      <button id="refreshBtn" class="refresh-btn">⟳ Refresh Data</button>
+      <button id="toggleLogsBtn" class="logs-btn">📋 Show Logs</button>
+    </div>
+
+    <div id="logsSection" class="card" style="display:none;">
+      <h2>Administrative Action Logs</h2>
+    <table id="logsTable">
+      <thead>
+        <tr>
+          <th>Корисник</th><th>Акција</th><th>Item ID</th><th>Време</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+    <div class="card">
+      <h2>Product Certification Applications</h2>
+      
+      <div class="search-section">
+        <div class="filter-options">
+          <div class="filter-group">
+            <h4>Filter by Status:</h4>
+            <label><input type="checkbox" name="status" value="Pending" checked> Pending</label>
+            <label><input type="checkbox" name="status" value="In Process" checked> In Process</label>
+            <label><input type="checkbox" name="status" value="Certifying" checked> Confirming</label>
+            <label><input type="checkbox" name="status" value="Completed" checked> Completed</label>
+          
+		  </div>
+		  <div class="filter-group">
+  <h4>Filter by Date:</h4>
+  <label>Од:<input type="date" id="dateFrom" /></label>
+  <label>До:<input type="date" id="dateTo" /></label>
+</div>
+
+          <div class="filter-group">
+            <h4>Quick Search:</h4>
+            <input type="text" id="searchField" placeholder="Company, Product, Email...">
+          </div>
+		  <div class="filter-group">
+  <h4>Filter by Company:</h4>
+  <select id="companyFilter">
+    <option value="">All Companies</option>
+  </select>
+</div>
+        </div>
+      </div>
+	  </div>
+	   </div>
+<div class="container full-width">
+      <table id="appsTable">
+    <thead>
+      <tr>
+        <th>ID</th><th>Created At</th><th>Company</th><th>Product</th><th>Contact</th><th>Email</th>
+        <th>Status</th><th>Conf. No.</th><th>Files</th><th>Actions</th><th>Delete</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+      </table>
+    </div>
+ 
+
+ <script>
+  // 1) Кеширај елементи
+  const refreshBtn     = document.getElementById('refreshBtn');
+  const companyFilter  = document.getElementById('companyFilter');
+  const dateFrom       = document.getElementById('dateFrom');
+  const dateTo         = document.getElementById('dateTo');
+  const searchField    = document.getElementById('searchField');
+  const statusChecks   = document.querySelectorAll('input[name="status"]');
+
+let createdAtAsc = false;  // почетен редослед: најнови надоле
+
+  // По вчитување на апликации повикај ја и оваа функција
+  function enableCreatedAtSort() {
+    // селектирај го TH за Created At (2-ри колон)
+    const th = document.querySelector('#appsTable thead th:nth-child(2)');
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', () => {
+      const tbody = document.querySelector('#appsTable tbody');
+      // преведи ги редовите во низа
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      // сортирај по датум
+      rows.sort((a,b) => {
+        const tdA = a.children[1].textContent;
+        const tdB = b.children[1].textContent;
+        const dateA = Date.parse(tdA.replace(/(\d+)\.(\d+)\.(\d+)/, '$2/$1/$3'));
+        const dateB = Date.parse(tdB.replace(/(\d+)\.(\d+)\.(\d+)/, '$2/$1/$3'));
+        return createdAtAsc ? dateA - dateB : dateB - dateA;
+      });
+      // исчисти tbody и прикачи ги сортираните редови
+      tbody.innerHTML = '';
+      rows.forEach(r => tbody.appendChild(r));
+      // преврти флаг
+      createdAtAsc = !createdAtAsc;
+      // променa на стрелка во header (опционално)
+      th.textContent = `Created At ${createdAtAsc?'↑':'↓'}`;
+    });
+  }
+
+  // Во loadApplications(), откако ќе ги поставиш редовите:
+  // ...
+  loadApplications().then(() => {
+    enableCreatedAtSort();
+  });
+
+  // 2) Функција што ја вчитува табелата и пополнува dropdown-от
+  async function loadApplications() {
+    refreshBtn.disabled = true;
+    try {
+      const res  = await fetch('/api/admin/applications?_sort=-createdAt');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const apps = await res.json();
+
+      // 2a) Пополнување на Filter by Company
+      // Исчисти ги стари опциите (освен „All Companies“)
+      companyFilter.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+      // Собери уникатни имиња на компаниите
+      const companies = Array.from(new Set(apps.map(a => a.company.name))).sort();
+      companies.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value       = name;
+        opt.textContent = name;
+        companyFilter.appendChild(opt);
+      });
+
+      // 2b) Пополнување на табелата
+      const tbody = document.querySelector('#appsTable tbody');
+      tbody.innerHTML = apps.length
+        ? apps.map(app => {
+            const files = (app.docs||[]).map(f =>
+              `<a href="/uploads/${f}" target="_blank">${f}</a>`
+            ).join('<br>') || '-';
+
+            const cert = app.cert_number
+              ? `<a href="/api/certificate/pdf/${app._id}" target="_blank">${app.cert_number}</a>`
+              : '-';
+
+            const issueDis = app.status==='Completed' ? '' : 'disabled';
+
+            return `
+              <tr>
+                <td>${app._id}</td>
+                <td>${(function(){
+                  const ts = app.createdAt
+                           ? new Date(app.createdAt)
+                           : new Date(parseInt(app._id.substring(0,8),16)*1000);
+                  return ts.toLocaleString('mk-MK');
+                })()}</td>
+                <td>${app.company.name} (${app.company.matichen_broj})</td>
+                <td>${app.product}</td>
+                <td>${app.contact}</td>
+                <td>${app.email}</td>
+                <td>
+                  <select data-id="${app._id}" class="status-select">
+                    ${['Pending','In Process','Certifying','Completed']
+                      .map(s=>`<option value="${s}" ${app.status===s?'selected':''}>${s}</option>`)
+                      .join('')}
+                  </select>
+                  <button class="save-btn" data-id="${app._id}" disabled>Save</button>
+                </td>
+                <td>${cert}</td>
+                <td>${files}</td>
+                <td>
+                  <button data-id="${app._id}" class="issue-btn" ${issueDis}>Issue Cert</button>
+                  <button onclick="
+                    window.location.href =
+                      'mailto:${app.email}?subject=' +
+                      encodeURIComponent('Информација за продукт ${app.product}')
+                  ">Испрати</button>
+                </td>
+				 <td>
+    <a href="#" class="delete-link" data-id="${app._id}">Delete</a>
+ </td>
+              </tr>`;
+          }).join('')
+        : '<tr><td colspan="10">Нема апликации.</td></tr>';
+
+      // реактивност за Save/Issue копчињата
+      document.querySelectorAll('.status-select').forEach(sel => {
+        sel.addEventListener('change', () => {
+          document.querySelector(`.save-btn[data-id="${sel.dataset.id}"]`).disabled = false;
+        });
+      });
+      document.querySelectorAll('.save-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const id  = btn.dataset.id;
+    const sel = document.querySelector(`.status-select[data-id="${id}"]`);
+
+    // побарај порака додека не е >=180 chars или корисникот не откаже
+    let msg;
+    do {
+      msg = prompt('Внесете објаснување (минимум 180 карактери):');
+      if (msg === null) return;                   // корисникот откажа
+      if (msg.length < 180) {
+        alert(`Текстот е пократок од 180 карактери (${msg.length}).`);
+      }
+    } while (msg.length < 180);
+
+    // праќаме ново тело со message
+    try {
+      const res = await fetch(`/api/admin/applications/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({ status: sel.value, message: msg })
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      loadApplications();
+    } catch(e) {
+      alert('Грешка при Save: ' + e.message);
+    }
+  });
+});
+
+      document.querySelectorAll('.issue-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          window.open(`/api/certificate/pdf/${btn.dataset.id}`, '_blank');
+        });
+      });
+document.querySelectorAll('.delete-link').forEach(link => {
+  link.addEventListener('click', async e => {
+    e.preventDefault();
+    // Прозорец за потврда (OK = Да, Cancel = Не)
+    if (confirm('Дали сте сигурни дека сакате да избришете оваа апликација?')) {
+      try {
+        const res = await fetch(`/api/admin/applications/${link.dataset.id}`, {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        // Преземи ја табелата повторно
+        loadApplications();
+      } catch (err) {
+        alert('Грешка при бришење: ' + err.message);
+      }
+    }
+    // Ако корисникот кликне „Не“, не правиме ништо
+  });
+});
+    } catch(e) {
+      alert('Не успеа да се вчитаат апликациите: ' + e.message);
+    } finally {
+      refreshBtn.disabled = false;
+    }
+  }
+
+  // 3) Функција за филтрирање
+  function filterApplications() {
+    const searchText      = searchField.value.toLowerCase();
+    const statusFilters   = Array.from(statusChecks).filter(cb=>cb.checked).map(cb=>cb.value);
+    const selectedCompany = companyFilter.value;
+    const fromTs          = dateFrom.value ? new Date(dateFrom.value).getTime() : null;
+    const toTs            = dateTo.value   ? new Date(dateTo.value).getTime()   : null;
+
+    document.querySelectorAll('#appsTable tbody tr').forEach(row => {
+      const cells = row.querySelectorAll('td');
+      let ok = true;
+
+      // статус
+      const status = row.querySelector('.status-select').value;
+      if (!statusFilters.includes(status)) ok = false;
+
+      // текст
+      if (ok && searchText) {
+        ok = [2,3,4,5,7].some(i =>
+          cells[i].textContent.toLowerCase().includes(searchText)
+        );
+      }
+
+      // компанија
+      if (ok && selectedCompany) {
+        // cells[2] = "Name (матичен број)"
+        const nameOnly = cells[2].textContent.replace(/\s*\(.*\)/, '');
+        if (nameOnly !== selectedCompany) ok = false;
+      }
+
+      // датум
+      if (ok && (fromTs || toTs)) {
+        const dateCell = cells[1].textContent;
+        const cellTs   = new Date(
+          dateCell.replace(/(\d+)\.(\d+)\.(\d+),/, '$2/$1/$3,')
+        ).getTime();
+        if (fromTs !== null && cellTs < fromTs) ok = false;
+        if (toTs   !== null && cellTs > toTs + 24*3600*1000 -1) ok = false;
+      }
+
+      row.style.display = ok ? '' : 'none';
+    });
+  }
+
+  // 4) Слушачи за сите филтри и копчиња
+  refreshBtn.addEventListener('click', loadApplications);
+  companyFilter.addEventListener('change', filterApplications);
+  dateFrom.addEventListener('change', filterApplications);
+  dateTo.addEventListener('change', filterApplications);
+  searchField.addEventListener('input', filterApplications);
+  statusChecks.forEach(cb => cb.addEventListener('change', filterApplications));
+
+  // 5) Првично вчитување
+  document.addEventListener('DOMContentLoaded', () => {
+    loadApplications();
+  });
+  app.get('/api/admin/applications', requireAdmin, async (req, res) => {
+  // Дозволени статуси по role:
+  const role = req.session.user.role;
+  let allowed = [];
+  if (role === 'super') {
+    allowed = ['Pending','In Process','Certifying','Completed'];
+  } else if (role === 'processor') {
+    allowed = ['Pending','In Process'];
+  } else if (role === 'certifier') {
+    allowed = ['Certifying','Completed'];
+  }
+  const apps = await Application
+    .find({ status: { $in: allowed } })
+    .populate('company')
+    .sort({ createdAt: -1 });   // и најновите најгоре
+  res.json(apps);
+});
+// 1) Кога ја креваш табелата од back-end, веќе е филтрирана по role
+
+// 2) Овозможи само „напредни“ статус-опции (нема да може да враќа назад)
+function restrictStatusOptions() {
+  document.querySelectorAll('.status-select').forEach(sel => {
+    const opts   = Array.from(sel.options).map(o=>o.value);
+    const curr   = sel.value;
+    const idx    = opts.indexOf(curr);
+    // остануваат само opts[idx...] 
+    sel.innerHTML = opts
+      .filter((s,i)=> i >= idx)
+      .map(s=> `<option value="${s}" ${s===curr?'selected':''}>${s}</option>`)
+      .join('');
+  });
+}
+
+// 3) По секое вчитување:
+loadApplications().then(() => {
+  enableCreatedAtSort();
+  restrictStatusOptions();
+});
+
+  
+</script>
+
+</body>
+</html>

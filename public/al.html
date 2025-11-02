@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aplikacioni DIAB-REG</title>
+  <style>
+    :root {
+      --primary: #2a7f9b;
+      --primary-light: #3a9cb9;
+      --secondary: #6bb7c7;
+      --accent: #d64550;
+      --light: #f8fcfd;
+      --dark: #2d3748;
+      --muted: #6b7280;
+      --card-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      --card-shadow-hover: 0 8px 16px rgba(0,0,0,0.12);
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      margin: 0; padding: 0;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 100vh;
+      box-shadow: var(--card-shadow);
+    }
+    @media (min-width: 768px) {
+      .wrapper {
+        margin: 20px auto;
+        border-radius: 12px;
+      }
+    }
+    .hidden { display: none; }
+    .card-container {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    .card {
+      flex: 1;
+      min-width: 280px;
+      padding: 2rem 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background: white;
+      box-shadow: var(--card-shadow);
+      border: 1px solid #e0f2f7;
+      position: relative;
+      overflow: hidden;
+      background-color: #f9fdff;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      border-color: #cbd5e0;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease-out;
+    }
+    .card:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    .card h3 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+    .card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    .small-card {
+      flex: 0 0 auto;
+      min-width: 180px;
+      padding: 20px;
+      font-size: 1rem;
+    }
+    .small-card h3 {
+      font-size: 1rem;
+      margin: 0 0 6px;
+    }
+    .small-card p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    h1 {
+      margin-top: 0;
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 2.4rem;
+      line-height: 1.3;
+    }
+    h2 {
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 1.8rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+    .form-container {
+      background: #f9fdff;
+      border-radius: 12px;
+      padding: 30px;
+      margin-top: 30px;
+      border: 1px solid #d9eef4;
+      box-shadow: 0 5px 20px rgba(145,192,208,0.1);
+    }
+    form { max-width: 600px; margin: 0 auto; }
+    label {
+      display: block;
+      margin: 20px 0 8px;
+      font-weight: 500;
+      color: var(--dark);
+      font-size: 0.95rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #fff;
+      transition: all 0.2s ease-out;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      background: #fff;
+    }
+    button {
+      width: 100%;
+      padding: 14px 24px;
+      margin: 15px 0;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+      border: 2px solid transparent;
+    }
+    button:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow-hover);
+      border-color: rgba(255,255,255,0.2);
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .back-btn {
+      background: white;
+      border: 2px solid #d9eef4;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .back-btn:hover {
+      background: #f0f9fc;
+      border-color: var(--secondary);
+      color: var(--primary-light);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    @keyframes ripple {
+      0% { transform: scale(0); opacity: 0.5; }
+      100% { transform: scale(20); opacity: 0; }
+    }
+    /* Tables */
+    #myAppsSection table, #certifiedSection table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      margin-top: 25px; background: #fff; border-radius: 10px;
+      overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    }
+    #myAppsSection th, #myAppsSection td,
+    #certifiedSection th, #certifiedSection td {
+      border-bottom: 1px solid #eee; padding: 12px 15px; text-align: left;
+    }
+    #myAppsSection th, #certifiedSection th {
+      background: var(--primary); color: #fff; font-weight: 500;
+    }
+    #myAppsSection tr:hover td, #certifiedSection tr:hover td {
+      background: #f8f9fa;
+    }
+    #statusResult {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      border-left: 4px solid var(--secondary);
+    }
+    #statusResult strong {
+      display: inline-block; min-width: 100px; color: var(--dark);
+    }
+    /* Documents list */
+    #docsList ul { list-style: none; padding-left: 0; }
+    #docsList li { margin: 5px 0; }
+    /* Certified filters */
+    #certifiedSection .filter-options {
+      display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;
+    }
+    #certifiedSection .filter-options label {
+      flex: 1; min-width: 150px; font-size: 0.9rem;
+    }
+	
+	 #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      width: 90%;
+      max-width: 900px;
+      margin: 20px auto;
+    }
+    #gallery img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+    }
+	.frame {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+    /* E mbështetur nga */
+    #supported {
+      text-align: center;
+      margin: 30px 0;
+    }
+    #supported p {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .fixed-logo {
+      width: 120px;
+      margin: 0 15px;
+      vertical-align: middle;
+    }
+	
+	#submitBtn:disabled {
+  background: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+#submitBtn:not(:disabled) {
+  background: linear-gradient(135deg, #2b6cb0, #4299e1);
+  color: white;
+  cursor: pointer;
+}
+
+#acceptTerms {
+  margin-right: 1px;
+}
+
+#termsLink {
+  margin-left: 0;
+  text-decoration: underline;
+  color: var(--primary);
+}
+	#langSelect {
+	text-align: center; 
+	
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <header style="background: linear-gradient(135deg, #1a6a82, #2a7f9b); color: white; padding: 2rem 1rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <div style="max-width: 800px; margin: 0 auto;">
+	    <select id="langSelect">
+		<option value="http://localhost:3000/al.html"selected>--------Shqip--------</option>
+  <option value="http://localhost:3000/" >Македонски</option>
+  <option value="http://localhost:3000/en.html">English</option>
+  
+</select>
+        <img src="/logo.jpg" alt="Logo DIAB-REG" style="height: 200px; margin-bottom: 1rem;">
+		
+        <h1 style="font-size: 2rem; font-weight: 700; margin: 0 0 0.5rem; color: white;">Sistemi i Certifikimit dhe Rregullimit</h1>
+        <p style="font-size: 1.1rem; opacity: 0.9; margin: 0;">
+          për produktet e destinuara për të gjithë personat me diabet
+        </p>
+		
+		 <div id="supported">
+    <p>E mbështetur nga:</p>
+    <img
+      class="fixed-logo"
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbBMbxYIyarbBG_HV1F3IABrK05X1i3zJHUA&s"
+      alt="Logo 1"
+    >
+    <img
+      class="fixed-logo"
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1cPOdSQDz5IeQzb7-284mp2ndLup06Ks6Cw&s"
+      alt="Logo 2"
+    >
+  </div>
+        <button id="btnMyApps" class="hidden" style="margin-top: 1.5rem; background: white; color: #2b6cb0; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          Aplikimet e Mia
+        </button>
+      </div>
+    </header>
+    <div style="padding: 2rem;">
+
+    <!-- Seksioni fillestar -->
+    <div id="initialSection">
+      <div style="text-align:center; margin-bottom:20px;">
+        <div id="btnCertified" class="card small-card">
+          <h3>Certifikuar</h3>
+          <p>nga DIAB-REG</p>
+        </div>
+      </div>
+      <div class="card-container">
+        <div id="showLoginBtn" class="card"><h3>Hyr</h3><p>Keni llogari?</p></div>
+        <div id="showRegisterBtn" class="card"><h3>Regjistrohu</h3><p>Përdorues i ri?</p></div>
+      </div>
+      <div class="card-container">
+        <div id="btnDocs"     class="card small-card"><h3>Dokumente</h3><p>dhe rregullore</p></div>
+        <div id="showPriceBtn" class="card small-card"><h3>Çmimet</h3></div>
+      </div>
+      <div id="gdprMessage" style="margin-top:30px; padding:20px; background:#f8f9fa;
+                                 border-radius:8px; border-left:4px solid var(--secondary);">
+        <strong>DIAB-REG mbledh, përpunon dhe ruan vetëm të dhëna që lidhen me subjekte juridike:</strong>
+        <ul>
+          <li>Emri i kompanisë</li>
+          <li>EMBS</li>
+          <li>Emri i produktit</li>
+          <li>Kategoria</li>
+          <li>Data</li>
+        </ul>
+        <p>Pa të dhëna personale. Pa cookies për gjurmim.</p>
+      </div>
+      <div id="docsList" style="margin-top:20px;"></div>
+    </div>
+
+    <!-- Aplikime Certifikuara -->
+    <div id="certifiedSection" class="hidden">
+      <button id="backFromCertified" class="back-btn">&larr; Kthehu</button>
+      <h2>Aplikime Certifikuara</h2>
+      <div class="filter-options">
+        <label>ID: <input type="text" id="filterIdCert"    placeholder="Filtro sipas ID"/></label>
+        <label>Krijuar më: <input type="text" id="filterDateCert"  placeholder="Filtro sipas Datës"/></label>
+        <label>Kompania: <input type="text" id="filterCompanyCert" placeholder="Filtro sipas Kompanisë"/></label>
+        <label>Produkti: <input type="text" id="filterProductCert" placeholder="Filtro sipas Produktit"/></label>
+        <label>Statusi:  <input type="text" id="filterStatusCert"  value="Përfunduar" disabled/></label>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Krijuar më</th><th>Kompania</th><th>Produkti</th>
+            <th>Kontakti</th><th>Email</th><th>Statusi</th><th>Nr. Cert.</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Seksioni hyrjes -->
+    <div id="loginSection" class="hidden">
+      <button id="backFromLogin" class="back-btn">&larr; Kthehu në fillim</button>
+      <div class="form-container">
+        <h2>Hyrje</h2>
+        <form id="loginForm">
+          <label>Numri i Identifikimit Kombëtar (EMBS)</label>
+          <input type="text" id="loginMat" required placeholder="Shkruani ID tuaj"/>
+          <label>Fjalëkalimi</label>
+          <input type="password" id="loginPass" required placeholder="Shkruani fjalëkalimin tuaj"/>
+          <button type="submit">Hyr</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Seksioni regjistrimit -->
+    <div id="registerSection" class="hidden">
+      <button id="backFromRegister" class="back-btn">&larr; Kthehu në fillim</button>
+      <div class="form-container">
+        <h2>Regjistrimi</h2>
+        <form id="registerForm">
+          <label>Numri i Identifikimit Kombëtar (EMBS)</label>
+          <input type="text" name="matichen_broj" required/>
+          <label>Emri i kompanisë</label>
+          <input type="text" name="name" required/>
+          <label>Email</label>
+          <input type="email" name="email" required/>
+          <label>Fjalëkalimi</label>
+          <input type="password" name="password" required/>
+          <button type="submit">Regjistrohu</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Pas hyrjes -->
+    <div id="afterLoginSection" class="hidden">
+      <button id="backFromAfterLogin" class="back-btn">&larr; Dil</button>
+      <div class="form-container">
+        <h2>Mirë se vini!</h2>
+        <p>Mund të dërgoni aplikime dhe të kontrolloni certifikatat.</p>
+
+        <!-- Forma e aplikimit -->
+        <div id="applySection" style="margin-top:30px;">
+          <h3>Dërgo Aplikim të Ri</h3>
+          <form id="applicationForm" action="/apply-and-pay" method="POST" enctype="multipart/form-data">
+            <label>Persona Kontakti</label>
+            <input type="text" name="contact" required/>
+            <label>Email Kontakti</label>
+            <input type="email" name="email" required/>
+			<label>Kategoria</label>
+  <select name="category" id="categorySelect" required>
+    <option value="">– Zgjidh –</option>
+    <option value="Додатоци и потрошен материјал">Aksesorë dhe materiale të konsumueshme (45 €)</option>
+    <option value="Потрошен материјал за мерење/инјектирање">Materiale të konsumueshme për matje/injektim (65 €)</option>
+    <option value="Уреди за мерење">Pajisje për matje (125 €)</option>
+    <option value="Уреди за апликација на инсулин">Pajisje për administrim të insulinës (170 €)</option>
+    <option value="Автоматизирани системи">Sisteme të automatizuara (260 €)</option>
+  </select>
+            <label>Emri i Produktit</label>
+            <input type="text" name="product" required/>
+            <label>Ngarko Dokumentet</label>
+            <input type="file" name="docs" multiple required/>
+			<label style="display:flex; align-items:center; gap:8px; margin-top:1rem;">
+  <input type="checkbox" id="acceptTerms" />
+ 
+  <a href="/uslov/uslov.pdf" id="termsLink" target="_blank">Pranoj kushtet e pagesës me faturë në përputhje me DIAB-REG</a>
+
+</label>
+
+<button id="submitBtn" type="submit" disabled>Dërgo Aplikimin</button>
+
+          </form>
+        </div>
+
+        <!-- Kontrollo statusin -->
+        <div id="statusSection" style="margin-top:40px;">
+          <hr/>
+          <h3>Kontrollo Statusin</h3>
+          <div style="display:flex; gap:10px; align-items:center; margin-top:15px;">
+            <input type="text" id="statusId" placeholder="Shkruani ID të aplikimit" style="flex:1;"/>
+            <button id="checkBtn" style="width:auto; padding:0 20px;">Kontrollo</button>
+          </div>
+          <div id="statusResult" style="margin-top:20px; padding:15px; background:#f9f9f9;border-radius:4px;"></div>
+          <button id="backFromStatus" class="back-btn" style="margin-top:20px; width:auto;">&larr; Kthehu</button>
+        </div>
+
+        <!-- Dokumente dhe rregullore & Çmimet -->
+        <div style="margin-top:30px; text-align:center;">
+          <button id="btnDocs" style="margin-right:20px; width:140px;">Dokumente dhe rregullore</button>
+          <button id="showPriceBtn" style="width:100px;">Çmimet</button>
+        </div>
+        <div id="docsList" style="margin-top:20px;"></div>
+
+        <div style="margin-top:30px; line-height:1.5;">
+          <p><strong>DIAB-REG mbledh, përpunon dhe ruan vetëm të dhëna që lidhen me subjekte juridike:</strong></p>
+          <ul>
+            <li>Emri i kompanisë</li><li>EMBS</li><li>Emri i produktit</li>
+            <li>Kategoria</li><li>Data</li>
+          </ul>
+          <p>Pa të dhëna personale. Pa cookies për gjurmim.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aplikimet e Mia -->
+    <div id="myAppsSection" class="hidden">
+      <button id="backFromMyApps" class="back-btn">&larr; Kthehu</button>
+      <h2>Aplikimet e Mia</h2>
+      <table>
+        <thead><tr>
+          <th>ID</th><th>Data</th><th>Produkti</th><th>Statusi</th>
+          <th>Nr. Cert.</th><th>Shiko</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    </div>
+	 <div id="gallery"></div>
+
+    <footer style="padding: 2rem; text-align: center; color: var(--muted); background: var(--light); border-top: 1px solid rgba(0,0,0,0.05);">
+      © 2025 DIAB-REG Sistemi i Certifikimit. Të gjitha të drejtat e rezervuara.
+    </footer>
+  </div>
+ <script>
+         const images = [
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQhyHn4MpY9UEEmWgfjxVh3JAqXveq9_2wZw&s',
+      'https://upload.wikimedia.org/wikipedia/en/b/b1/Novo_Nordisk_-_Logo.svg',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/F._Hoffmann-La_Roche_2021_logo.svg/1200px-F._Hoffmann-La_Roche_2021_logo.svg.png',
+      'https://farmaon.al/wp-content/uploads/2023/04/e22bd229-helathyl08-favio-forte.jpg'
+    ];
+	  document.addEventListener('DOMContentLoaded', () => {
+    // attach language switcher
+    const langSelect = document.getElementById('langSelect');
+    langSelect.addEventListener('change', e => {
+      window.location.href = e.target.value;
+    });
+  });
+
+    const gallery = document.getElementById('gallery');
+const translations = {
+      mk: {
+        "lang.select.label": "Глуha:",
+        "lang.mk": "Македонски",
+        "lang.en": "English",
+        "lang.sq": "Shqip",
+        "header.title": "Систем за сертификација и регулација",
+        "header.subtitle": "на производи наменети за сите лица со дијабетес",
+        "btn.myApps": "Мои апликации",
+        "card.certified.title": "Сертифицирани",
+        "card.certified.subtitle": "од DIAB-REG",
+        "card.login.title": "Најави се",
+        "card.login.subtitle": "Имате профил?",
+        "card.register.title": "Регистрирај се",
+        "card.register.subtitle": "Нов корисник?",
+        "card.docs.title": "Документи",
+        "card.docs.subtitle": "и регулативи",
+        "card.price.title": "Ценовник",
+        "gdpr.title": "DIAB-REG собира, обработува и чува само податоци кои се однесуваат на правни субјекти:",
+        "gdpr.item.company": "Назив на компанија",
+        "gdpr.item.embs": "ЕМБС",
+        "gdpr.item.product": "Назив на производ",
+        "gdpr.item.category": "Категорија",
+        "gdpr.item.date": "Датум",
+        "gdpr.footer": "Без лични податоци. Нема колачиња за следење.",
+        "section.certified.title": "Сертифицирани барања",
+        "filter.id": "ID:",
+        "filter.date": "Created At:",
+        "filter.company": "Company:",
+        "filter.product": "Product:",
+        "filter.status": "Status:",
+        "filter.id.placeholder": "Filter по ID",
+        "filter.date.placeholder": "Filter по Датум",
+        "filter.company.placeholder": "Filter по Компанија",
+        "filter.product.placeholder": "Filter по Продукт",
+        "cert.table.id": "ID",
+        "cert.table.createdAt": "Created At",
+        "cert.table.company": "Company",
+        "cert.table.product": "Product",
+        "cert.table.contact": "Contact",
+        "cert.table.email": "Email",
+        "cert.table.status": "Status",
+        "cert.table.certNo": "Cert. No.",
+        "login.title": "Најава",
+        "login.label.id": "Матичен број (ЕМБС)",
+        "login.placeholder.id": "Внесете го матичен број",
+        "login.label.password": "Лозинка",
+        "login.placeholder.password": "Внесете ја лозинката",
+        "btn.submit.login": "Најави се",
+        "register.title": "Регистрација",
+        "register.label.id": "Матичен број (ЕМБС)",
+        "register.label.company": "Име на компанија",
+        "register.label.email": "Е-пошта",
+        "register.label.password": "Лозинка",
+        "btn.submit.register": "Регистрирај се",
+        "btn.back": "Назад",
+        "btn.logout": "Одјави се",
+        "afterlogin.welcome": "Добредојдовте!",
+        "afterlogin.info": "Можете да поднесувате апликации и да ги проверувате сертификатите.",
+        "apply.title": "Поднеси нова апликација",
+        "apply.label.contact": "Контакт лице",
+        "apply.label.email": "Контакт е-пошта",
+        "apply.label.category": "Категорија",
+        "apply.select.category.placeholder": "– Избери –",
+        "apply.label.product": "Име на продукт",
+        "apply.label.docs": "Прикачете документи",
+        "btn.submit.apply": "Поднеси апликација",
+        "status.title": "Проверка статус",
+        "status.input.placeholder": "Внесете ID на апликација",
+        "btn.check.status": "Провери",
+        "statusResult.notFound": "Не пронајдено.",
+        "myapps.title": "Мои апликации",
+        "myapps.table.id": "ID",
+        "myapps.table.date": "Датум",
+        "myapps.table.product": "Продукт",
+        "myapps.table.status": "Статус",
+        "myapps.table.certNo": "Cert No.",
+        "myapps.table.view": "Преглед",
+        "footer.text": "© 2025 DIAB-REG Систем за сертификација. Сите права се задржани."
+      },
+      en: {
+        "lang.select.label": "Language:",
+        "lang.mk": "Macedonian",
+        "lang.en": "English",
+        "lang.sq": "Albanian",
+        "header.title": "Certification & Regulation System",
+        "header.subtitle": "for products intended for all people with diabetes",
+        "btn.myApps": "My Applications",
+        "card.certified.title": "Certified",
+        "card.certified.subtitle": "by DIAB-REG",
+        "card.login.title": "Log In",
+        "card.login.subtitle": "Have an account?",
+        "card.register.title": "Register",
+        "card.register.subtitle": "New user?",
+        "card.docs.title": "Documents",
+        "card.docs.subtitle": "and regulations",
+        "card.price.title": "Pricing",
+        "gdpr.title": "DIAB-REG collects, processes, and stores only data related to legal entities:",
+        "gdpr.item.company": "Company Name",
+        "gdpr.item.embs": "EMBS",
+        "gdpr.item.product": "Product Name",
+        "gdpr.item.category": "Category",
+        "gdpr.item.date": "Date",
+        "gdpr.footer": "No personal data. No tracking cookies.",
+        "section.certified.title": "Certified Applications",
+        "filter.id": "ID:",
+        "filter.date": "Created At:",
+        "filter.company": "Company:",
+        "filter.product": "Product:",
+        "filter.status": "Status:",
+        "filter.id.placeholder": "Filter by ID",
+        "filter.date.placeholder": "Filter by Date",
+        "filter.company.placeholder": "Filter by Company",
+        "filter.product.placeholder": "Filter by Product",
+        "cert.table.id": "ID",
+        "cert.table.createdAt": "Created At",
+        "cert.table.company": "Company",
+        "cert.table.product": "Product",
+        "cert.table.contact": "Contact",
+        "cert.table.email": "Email",
+        "cert.table.status": "Status",
+        "cert.table.certNo": "Cert. No.",
+        "login.title": "Login",
+        "login.label.id": "National ID (EMBS)",
+        "login.placeholder.id": "Enter your ID",
+        "login.label.password": "Password",
+        "login.placeholder.password": "Enter your password",
+        "btn.submit.login": "Log In",
+        "register.title": "Registration",
+        "register.label.id": "National ID (EMBS)",
+        "register.label.company": "Company Name",
+        "register.label.email": "Email",
+        "register.label.password": "Password",
+        "btn.submit.register": "Register",
+        "btn.back": "Back",
+        "btn.logout": "Log Out",
+        "afterlogin.welcome": "Welcome!",
+        "afterlogin.info": "You can submit applications and check certificates.",
+        "apply.title": "Submit New Application",
+        "apply.label.contact": "Contact Person",
+        "apply.label.email": "Contact Email",
+        "apply.label.category": "Category",
+        "apply.select.category.placeholder": "– Select –",
+        "apply.label.product": "Product Name",
+        "apply.label.docs": "Upload Documents",
+        "btn.submit.apply": "Submit Application",
+        "status.title": "Check Status",
+        "status.input.placeholder": "Enter application ID",
+        "btn.check.status": "Check",
+        "statusResult.notFound": "Not found.",
+        "myapps.title": "My Applications",
+        "myapps.table.id": "ID",
+        "myapps.table.date": "Date",
+        "myapps.table.product": "Product",
+        "myapps.table.status": "Status",
+        "myapps.table.certNo": "Cert No.",
+        "myapps.table.view": "View",
+        "footer.text": "© 2025 DIAB-REG Certification System. All rights reserved."
+      },
+      sq: {
+        "lang.select.label": "Gjuha:",
+        "lang.mk": "Maqedonisht",
+        "lang.en": "Anglisht",
+        "lang.sq": "Shqip",
+        "header.title": "Sistemi i Certifikimit dhe Rregullimit",
+        "header.subtitle": "për produktet e destinuara për të gjithë personat me diabet",
+        "btn.myApps": "Aplikimet e Mia",
+        "card.certified.title": "Certifikuar",
+        "card.certified.subtitle": "nga DIAB-REG",
+        "card.login.title": "Hyr",
+        "card.login.subtitle": "Keni llogari?",
+        "card.register.title": "Regjistrohu",
+        "card.register.subtitle": "Përdorues i ri?",
+        "card.docs.title": "Dokumente",
+        "card.docs.subtitle": "dhe rregullore",
+        "card.price.title": "Çmimet",
+        "gdpr.title": "DIAB-REG mbledh, përpunon dhe ruan vetëm të dhëna që lidhen me subjekte juridike:",
+        "gdpr.item.company": "Emri i kompanisë",
+        "gdpr.item.embs": "EMBS",
+        "gdpr.item.product": "Emri i produktit",
+        "gdpr.item.category": "Kategoria",
+        "gdpr.item.date": "Data",
+        "gdpr.footer": "Pa të dhëna personale. Pa cookies për gjurmim.",
+        "section.certified.title": "Aplikime Certifikuara",
+        "filter.id": "ID:",
+        "filter.date": "Krijuar më:",
+        "filter.company": "Kompania:",
+        "filter.product": "Produkti:",
+        "filter.status": "Statusi:",
+        "filter.id.placeholder": "Filtro sipas ID",
+        "filter.date.placeholder": "Filtro sipas Datës",
+        "filter.company.placeholder": "Filtro sipas Kompanisë",
+        "filter.product.placeholder": "Filtro sipas Produktit",
+        "cert.table.id": "ID",
+        "cert.table.createdAt": "Krijuar më",
+        "cert.table.company": "Kompania",
+        "cert.table.product": "Produkti",
+        "cert.table.contact": "Kontakti",
+        "cert.table.email": "Email",
+        "cert.table.status": "Statusi",
+        "cert.table.certNo": "Nr. Cert.",
+        "login.title": "Hyrje",
+        "login.label.id": "Numri i Identifikimit Kombëtar (EMBS)",
+        "login.placeholder.id": "Shkruani ID tuaj",
+        "login.label.password": "Fjalëkalimi",
+        "login.placeholder.password": "Shkruani fjalëkalimin tuaj",
+        "btn.submit.login": "Hyr",
+        "register.title": "Regjistrimi",
+        "register.label.id": "Numri i Identifikimit Kombëtar (EMBS)",
+        "register.label.company": "Emri i kompanisë",
+        "register.label.email": "Email",
+        "register.label.password": "Fjalëkalimi",
+        "btn.submit.register": "Regjistrohu",
+        "btn.back": "Kthehu",
+        "btn.logout": "Dil",
+        "afterlogin.welcome": "Mirë se vini!",
+        "afterlogin.info": "Mund të dërgoni aplikime dhe të kontrolloni certifikatat.",
+        "apply.title": "Dërgo Aplikim të Ri",
+        "apply.label.contact": "Persona Kontakti",
+        "apply.label.email": "Email Kontakti",
+        "apply.label.category": "Kategoria",
+        "apply.select.category.placeholder": "– Zgjidh –",
+        "apply.label.product": "Emri i Produktit",
+        "apply.label.docs": "Ngarko Dokumentet",
+        "btn.submit.apply": "Dërgo Aplikimin",
+        "status.title": "Kontrollo Statusin",
+        "status.input.placeholder": "Shkruani ID të aplikimit",
+        "btn.check.status": "Kontrollo",
+        "statusResult.notFound": "Nuk u gjet.",
+        "myapps.title": "Aplikimet e Mia",
+        "myapps.table.id": "ID",
+        "myapps.table.date": "Data",
+        "myapps.table.product": "Produkti",
+        "myapps.table.status": "Statusi",
+        "myapps.table.certNo": "Nr. Cert.",
+        "myapps.table.view": "Shiko",
+        "footer.text": "© 2025 DIAB-REG Sistemi i Certifikimit. Të gjitha të drejtat e rezervuara."
+      }
+    };
+	
+	
+    // Прикажи ги сликите во рамки
+    function renderGallery() {
+      gallery.innerHTML = '';
+      images.forEach(src => {
+        const frame = document.createElement('div');
+        frame.className = 'frame';
+        const img = document.createElement('img');
+        img.src = src;
+        frame.appendChild(img);
+        gallery.appendChild(frame);
+      });
+    }
+
+    // Fisher–Yates shuffle
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // Прво рендерирање
+    renderGallery();
+
+    // Меша и рендерира секои 15 секунди
+    setInterval(() => {
+      shuffleArray(images);
+      renderGallery();
+    }, 15000);
+  
+    let token = null;
+    const initial    = document.getElementById('initialSection');
+    const certified  = document.getElementById('certifiedSection');
+    const loginSec   = document.getElementById('loginSection');
+    const regSec     = document.getElementById('registerSection');
+    const after      = document.getElementById('afterLoginSection');
+    const myAppsSec  = document.getElementById('myAppsSection');
+    const docsList   = document.getElementById('docsList');
+
+const form         = document.getElementById('applicationForm');
+const submitBtn    = document.getElementById('submitBtn');
+const acceptTerms  = document.getElementById('acceptTerms');
+const requiredEls  = [
+  document.getElementById('contactInput'),
+  document.getElementById('emailInput'),
+  document.getElementById('categorySelect'),
+  document.getElementById('productInput'),
+  document.getElementById('docsInput')
+];
+
+function updateSubmitState() {
+  // 1) Сите задолжителни полиња да имаат вредност
+  const allFilled = requiredEls.every(el => {
+    if (el.type === 'file') {
+      return el.files.length > 0;
+    }
+    return el.value.trim() !== '';
+  });
+  // 2) Чекбоксот да е чекнат
+  submitBtn.disabled = !(allFilled && acceptTerms.checked);
+}
+
+
+
+// Овозможи/оневозможи копчето според чекирањето
+acceptTerms.addEventListener('change', () => {
+  submitBtn.disabled = !acceptTerms.checked;
+});
+
+// Измени го submit handler-от да не пренасочува автоматски
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!token) return alert('Мора да се најавиш');
+  if (!acceptTerms.checked) return alert('Мора да ги прифатите условите');
+
+  // 1) Испрати апликација на backend
+  const fd = new FormData(form);
+  const applyRes  = await fetch('/api/apply', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + token },
+    body: fd
+  });
+  const applyJson = await applyRes.json();
+  if (!applyJson.id) {
+    return alert('Грешка при поднесување: ' + (applyJson.error||''));
+  }
+
+  // 2) Отстрани пренасочувањето кон плаќање
+  // const link = PAYMENT_LINKS[fd.get('category')];
+  // window.location.href = link;
+
+  // 3) Информирај го корисникот
+  alert('Апликацијата е поднесена! Вашето ID е ' + applyJson.id);
+});
+
+const paymentContainer = document.getElementById('paymentContainer');
+
+const PAYMENT_LINKS = {
+  'Додатоци и потрошен материјал':
+    'https://buy.stripe.com/test_14AbJ08nigZJaQEawm2go00',
+  'Потрошен материјал за мерење/инјектирање':
+    'https://buy.stripe.com/test_3eFhJ08nigZJaQEaijKLm00',
+  'Уреди за мерење':
+    'https://buy.stripe.com/test_28abJ08nigZJaQEar7KLm00',
+  'Уреди за апликација на инсулин':
+    'https://buy.stripe.com/test_fGhkJ08nigZJaQEaxcUVm00',
+  'Автоматизирани системи':
+    'https://buy.stripe.com/test_kLmnj08nigZJaQEdfrEFm00'
+};
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!token) return alert('Мора да се најавиш');
+
+  const formData = new FormData(form);
+  const category = formData.get('category');
+  const link     = PAYMENT_LINKS[category];
+  if (!link) {
+    return alert('Избери валидна категорија');
+  }
+
+  // Зачувај ги формата во sessionStorage, за да може подоцна да ја прочиташ
+  // (без документи, тие нема да се зачуваат – затоа подобро е да направиш
+  // server-side apply-and-pay рутa, како што ти предложив претходно)
+  sessionStorage.setItem('appData', JSON.stringify({
+    contact: formData.get('contact'),
+    email:   formData.get('email'),
+    product: formData.get('product'),
+    category
+  }));
+
+  // Пренасочи корисникот на Stripe Hosted Payment Link
+  window.location.href = link;
+});
+
+
+
+    // Навигација
+    document.getElementById('showLoginBtn').onclick       = ()=>{
+      initial.classList.add('hidden');
+      loginSec.classList.remove('hidden');
+    };
+    document.getElementById('backFromLogin').onclick      = ()=>{
+      loginSec.classList.add('hidden');
+      initial.classList.remove('hidden');
+    };
+    document.getElementById('showRegisterBtn').onclick    = ()=>{
+      initial.classList.add('hidden');
+      regSec.classList.remove('hidden');
+    };
+    document.getElementById('backFromRegister').onclick   = ()=>{
+      regSec.classList.add('hidden');
+      initial.classList.remove('hidden');
+    };
+    document.getElementById('backFromAfterLogin').onclick = ()=>{
+      token = null;
+      after.classList.add('hidden');
+      initial.classList.remove('hidden');
+    };
+    document.getElementById('backFromStatus').onclick     = ()=>{
+      document.getElementById('statusSection').classList.add('hidden');
+      after.classList.remove('hidden');
+    };
+    document.getElementById('backFromMyApps').onclick     = ()=>{
+      myAppsSec.classList.add('hidden');
+      after.classList.remove('hidden');
+    };
+    document.getElementById('backFromCertified').onclick  = ()=>{
+      certified.classList.add('hidden');
+      initial.classList.remove('hidden');
+    };
+	
+	
+
+    // Сертифицирани од DIAB-REG
+    // Сертифицирани од DIAB-REG
+document.getElementById('btnCertified').addEventListener('click', async ()=>{
+  initial.classList.add('hidden');
+  certified.classList.remove('hidden');
+
+  // Ова е ја изменивме:
+  const res = await fetch('/api/admin/applications', { credentials: 'include' });
+
+  if (!res.ok) return alert('Грешка при вчитување');
+
+  const apps = (await res.json()).filter(x=>x.status==='Completed');
+  const tb = certified.querySelector('tbody');
+  tb.innerHTML = apps.map(a=>{
+    const d = new Date(a.createdAt).toLocaleString('mk-MK');
+    return `<tr>
+      <td>${a._id}</td><td>${d}</td><td>${a.company.name}</td>
+      <td>${a.product}</td><td>${a.contact}</td><td>${a.email}</td>
+      <td>${a.status}</td><td>${a.cert_number||''}</td>
+    </tr>`;
+  }).join('');
+});
+
+    function applyCertFilters(){
+      const f={
+        id:      document.getElementById('filterIdCert').value.toLowerCase(),
+        date:    document.getElementById('filterDateCert').value.toLowerCase(),
+        company: document.getElementById('filterCompanyCert').value.toLowerCase(),
+        product: document.getElementById('filterProductCert').value.toLowerCase()
+      };
+      certified.querySelectorAll('tbody tr').forEach(r=>{
+        const c = Array.from(r.cells).map(td=>td.textContent.toLowerCase());
+        const ok =
+          (!f.id      || c[0].includes(f.id))&&
+          (!f.date    || c[1].includes(f.date))&&
+          (!f.company || c[2].includes(f.company))&&
+          (!f.product || c[3].includes(f.product));
+        r.style.display = ok?'':'none';
+      });
+    }
+    ['filterIdCert','filterDateCert','filterCompanyCert','filterProductCert']
+      .forEach(id=>document.getElementById(id).addEventListener('input',applyCertFilters));
+
+    // Документи и регулативи
+    document.getElementById('btnDocs').addEventListener('click', async () => {
+  try {
+    const res  = await fetch('/api/documents');
+    if (!res.ok) throw new Error();
+    const json = await res.json();
+    // Генерирање на HTML-то за popup
+    const docsHtml = json.files
+      .map(f => `<li><a href="/documents/${encodeURIComponent(f)}" target="_blank">${f}</a></li>`)
+      .join('');
+    // Отворање нов popup прозорец
+    const popup = window.open('', 'docsPopup', 'width=600,height=400');
+    popup.document.write(`
+      <!DOCTYPE html>
+      <html lang="mk">
+      <head>
+        <meta charset="UTF-8"/>
+        <title>Документи и регулативи</title>
+        <style>
+          body { font-family: 'Segoe UI', sans-serif; padding:20px; }
+          h3 { color: var(--primary, #0078d4); }
+          ul { list-style: none; padding-left: 0; }
+          li { margin: 8px 0; }
+          a { color: var(--primary, #0078d4); text-decoration: none; }
+          a:hover { text-decoration: underline; }
+        </style>
+      </head>
+      <body>
+        <h3>Документи и регулативи</h3>
+        <ul>${docsHtml}</ul>
+      </body>
+      </html>
+    `);
+  } catch (e) {
+    alert('Грешка при вчитување документи');
+  }
+});
+
+    // Ценовник
+    document.getElementById('showPriceBtn').addEventListener('click', ()=>{
+      const priceTable = `
+        <h3>Ценовник на сертификати (МКД)</h3>
+        <table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;margin:10px auto;">
+          <thead><tr><th>Категорија</th><th>Примери</th><th>Цена(МКД)</th></tr></thead>
+          <tbody>
+            <tr><td>Додатоци и потрошен материјал</td><td>Лепенки, налепници, носачи</td><td>2500</td></tr>
+            <tr><td>Потрошен материјал за мерење/инјектирање</td><td>Тест ленти, игли, катетри</td><td>4000</td></tr>
+            <tr><td>Уреди за мерење</td><td>Глукометри, CGM, сензори</td><td>7500</td></tr>
+            <tr><td>Уреди за апликација на инсулин</td><td>Инсулински пенкала, Jet injectors</td><td>10000</td></tr>
+            <tr><td>Автоматизирани системи</td><td>Инсулински пумпи, хибридни системи</td><td>15000</td></tr>
+          </tbody>
+        </table>`;
+      const w = window.open('','price','width=600,height=400');
+      w.document.write(`<html><body>${priceTable}</body></html>`);
+    });
+
+    // Регистрација
+    document.getElementById('registerForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      const res  = await fetch('/api/auth/register',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      const json = await res.json();
+      if(json.success){
+        alert('Регистрација успешна!');
+        regSec.classList.add('hidden');
+        loginSec.classList.remove('hidden');
+      } else alert('Грешка: '+(json.error||''));
+    });
+
+    // Логин
+    document.getElementById('loginForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const body = {
+        matichen_broj: document.getElementById('loginMat').value,
+        password:      document.getElementById('loginPass').value
+      };
+      const res = await fetch('/api/auth/login',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      const json = await res.json();
+      if(json.token){
+        token = json.token;
+        alert('Најавa успешна!');
+        loginSec.classList.add('hidden');
+        after.classList.remove('hidden');
+        document.getElementById('btnMyApps').classList.remove('hidden');
+      } else alert('Login failed: '+(json.error||''));
+    });
+
+    // Поднеси апликација
+    document.getElementById('applicationForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      if(!token) return alert('Мора да се најавиш');
+      const fd = new FormData(e.target);
+      const res = await fetch('/api/apply',{method:'POST',
+        headers:{'Authorization':'Bearer '+token},body:fd});
+      const json = await res.json();
+      if(json.id) alert('Испратено! ID='+json.id);
+      else alert('Грешка: '+(json.error||''));
+    });
+
+    // Проверка статус
+    document.getElementById('checkBtn').addEventListener('click', async ()=>{
+      const id  = document.getElementById('statusId').value;
+      const res = await fetch('/api/status/'+encodeURIComponent(id));
+      const json= await res.json();
+      const r   = document.getElementById('statusResult');
+      if(!json.found) r.innerText='Не пронајдено.';
+      else {
+        const {status,company,cert_number} = json.application;
+        r.innerHTML = `<strong>ID:</strong>${id}<br><strong>Статус:</strong>${status}<br>
+                       <strong>Company:</strong>${company}` +
+          (status==='Completed'&&cert_number
+            ? `<br><br><a href="/confirm/${encodeURIComponent(cert_number)}" target="_blank">
+                 Преглед на сертификат ${cert_number}
+               </a>`
+            : '');
+      }
+      after.classList.add('hidden');
+      document.getElementById('statusSection').classList.remove('hidden');
+    });
+
+    // Мои апликации
+    document.getElementById('btnMyApps').addEventListener('click', async ()=>{
+      if(!token) return alert('Мора да се најавиш');
+      after.classList.add('hidden');
+      myAppsSec.classList.remove('hidden');
+      const res = await fetch('/api/my/applications',{headers:{'Authorization':'Bearer '+token}});
+      if(!res.ok) return alert('Грешка при вчитување апликации');
+      const apps = await res.json();
+      const tb = myAppsSec.querySelector('tbody');
+      tb.innerHTML = apps.map(app=>{
+        const d = new Date(app.createdAt).toLocaleString('mk-MK');
+        const cert = app.cert_number ? `<a href="/confirm/${encodeURIComponent(app.cert_number)}">${app.cert_number}</a>` : '-';
+        const view = app.cert_number ? `<a href="/confirm/${encodeURIComponent(app.cert_number)}">Преглед</a>` : '-';
+        return `<tr><td>${app._id}</td><td>${d}</td><td>${app.product}</td><td>${app.status}</td><td>${cert}</td><td>${view}</td></tr>`;
+      }).join('');
+    });
+	
+	function updateUIForAuth() {
+  if (token) {
+    document.getElementById('btnMyApps').classList.remove('hidden');
+  } else {
+    document.getElementById('btnMyApps').classList.add('hidden');
+  }
+}
+token = json.token;
+updateUIForAuth();
+// ако претходно си зачувал token во localStorage:
+token = localStorage.getItem('jwtToken');
+updateUIForAuth();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const acceptTerms = document.getElementById('acceptTerms');
+    const submitBtn   = document.getElementById('submitBtn');
+
+    // Почетно е оневозможено
+    submitBtn.disabled = true;
+
+    // Кога чекбоксот се менува, овозможи/оневозможи го копчето
+    acceptTerms.addEventListener('change', () => {
+      submitBtn.disabled = !acceptTerms.checked;
+    });
+  });
+document.addEventListener('DOMContentLoaded', () => {
+  const termsLink = document.getElementById('termsLink');
+  termsLink.addEventListener('click', e => {
+    e.preventDefault();
+    window.open(
+      '/uslov.pdf',
+      'UsloviPDF',
+      'width=800,height=600,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes'
+    );
+  });
+});
+// јазичен селектор
+document.getElementById('langSelect').addEventListener('change', function() {
+  // ако е Македонски (root), ова исто ќе работи
+  window.location.href = this.value;
+});
+
+  </script>
+</body>
+</html>

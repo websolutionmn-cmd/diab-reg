@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+  <meta charset="UTF-8">
+  <title>Успешно плаќање</title>
+</head>
+<body>
+  <div id="message">Ве молам почекајте…</div>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    // 1) pull session_id that Stripe appended
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    if (!sessionId) {
+      document.getElementById('message').innerText =
+        'Грешка: недостасува session_id.';
+      throw new Error('No session_id');
+    }
+
+    // 2) rehydrate token & form
+    const token = localStorage.getItem('token');
+    const raw = localStorage.getItem('pendingApp');
+    if (!token || !raw) {
+      document.getElementById('message').innerText =
+        'Грешка: немаме податоци за апликација.';
+      throw new Error('No pending app data');
+    }
+    const entries = JSON.parse(raw);
+    const formData = new FormData();
+    entries.forEach(([k,v]) => formData.append(k,v));
+
+    // 3) verify payment with Stripe, then only *then* actually create the Application
+    fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
+      headers: {
+        'Authorization': 'Bearer sk_test_…',   // your SECRET key
+      }
+    })
+    .then(r => r.json())
+    .then(session => {
+      if (session.payment_status !== 'paid') {
+        throw new Error('Payment not completed');
+      }
+      // 4) now call your own API to persist the application
+      return fetch('/api/apply', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        body: formData
+      });
+    })
+    .then(r => r.json())
+    .then(json => {
+      if (json.id) {
+        document.getElementById('message').innerHTML =
+          `✅ Плаќањето е успешно!<br>` +
+          `Вашето ID за апликација е: <strong>${json.id}</strong>`;
+        // cleanup
+        localStorage.removeItem('pendingApp');
+      } else {
+        throw new Error(json.error||'Неуспешно креирање апликација');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('message').innerText =
+        'Грешка: ' + err.message;
+    });
+  </script>
+</body>
+</html>
